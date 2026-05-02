@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Currency Converter",
+  "version": "1.0.0",
+  "description": "Automatically detects prices on web pages and shows converted amounts in your target currency.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://api.frankfurter.app/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Currency Converter"
+  },
+  "icons": {}
+}

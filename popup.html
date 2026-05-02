@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body { width: 260px; padding: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; }
+    h2 { margin: 0 0 12px; font-size: 16px; }
+    label { display: block; margin-bottom: 8px; font-weight: 500; }
+    select { width: 100%; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; margin-bottom: 12px; }
+    .status { color: #666; font-size: 12px; margin-top: 8px; }
+    button { width: 100%; padding: 8px; background: #ff6b35; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; }
+    button:hover { background: #e55a2b; }
+  </style>
+</head>
+<body>
+  <h2>💱 Currency Converter</h2>
+  <label for="target">Convert to:</label>
+  <select id="target">
+    <option value="CNY">CNY (¥ Chinese Yuan)</option>
+    <option value="USD">USD ($ US Dollar)</option>
+    <option value="EUR">EUR (€ Euro)</option>
+    <option value="GBP">GBP (£ British Pound)</option>
+    <option value="NZD">NZD (NZ$ New Zealand Dollar)</option>
+    <option value="AUD">AUD (A$ Australian Dollar)</option>
+    <option value="CAD">CAD (CA$ Canadian Dollar)</option>
+    <option value="JPY">JPY (¥ Japanese Yen)</option>
+  </select>
+  <button id="save">Save & Reload Page</button>
+  <div class="status" id="status"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
