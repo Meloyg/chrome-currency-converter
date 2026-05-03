@@ -1,31 +1,14 @@
 (() => {
-  // Detect what bare "$" likely means based on TLD or meta tags
-  function detectDollarCurrency() {
-    const host = location.hostname;
-    if (host.endsWith('.nz') || host.endsWith('.co.nz')) return 'NZD';
-    if (host.endsWith('.au') || host.endsWith('.com.au')) return 'AUD';
-    if (host.endsWith('.ca') || host.endsWith('.gc.ca')) return 'CAD';
-    // Check meta currency
-    const meta = document.querySelector('meta[property="og:price:currency"], meta[name="currency"], meta[itemprop="priceCurrency"]');
-    if (meta) {
-      const val = (meta.getAttribute('content') || '').toUpperCase();
-      if (['NZD', 'AUD', 'CAD', 'USD'].includes(val)) return val;
-    }
-    return 'USD'; // default fallback
-  }
-
-  const dollarCurrency = detectDollarCurrency();
-
   const CURRENCY_PATTERNS = [
-    { regex: /NZ\$\s?([\d,]+\.?\d*)/g, currency: 'NZD' },
     { regex: /US\$\s?([\d,]+\.?\d*)/g, currency: 'USD' },
     { regex: /A\$\s?([\d,]+\.?\d*)/g, currency: 'AUD' },
     { regex: /CA\$\s?([\d,]+\.?\d*)/g, currency: 'CAD' },
+    { regex: /NZ\$\s?([\d,]+\.?\d*)/g, currency: 'NZD' },
     { regex: /€\s?([\d,]+\.?\d*)/g, currency: 'EUR' },
     { regex: /([\d,]+\.?\d*)\s?€/g, currency: 'EUR', amountGroup: 1 },
     { regex: /£\s?([\d,]+\.?\d*)/g, currency: 'GBP' },
     { regex: /¥\s?([\d,]+\.?\d*)/g, currency: 'JPY' },
-    { regex: /\$\s?([\d,]+\.?\d*)/g, currency: dollarCurrency }, // generic $ uses detected currency
+    { regex: /\$\s?([\d,]+\.?\d*)/g, currency: 'NZD' }, // bare $ defaults to NZD
   ];
 
   const BADGE_CLASS = 'cc-ext-badge';
