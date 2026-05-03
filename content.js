@@ -131,6 +131,8 @@
     for (const container of containers) {
       if (container.hasAttribute(PROCESSED_ATTR)) continue;
       if (container.querySelector('.' + BADGE_CLASS)) continue;
+      // Skip if any child already has a badge (nested match)
+      if (container.closest('[' + PROCESSED_ATTR + ']')) continue;
       // Collect text from all child elements
       const text = container.textContent.replace(/\s+/g, '').trim();
       // Try to match a price pattern
