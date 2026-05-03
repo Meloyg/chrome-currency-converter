@@ -124,6 +124,42 @@
     });
   }
 
+  // Handle split-span prices like: <span>$</span><span>1,057</span><span>.63</span>
+  function processSplitPrices(root) {
+    // Look for containers with multiple child spans that together form a price
+    const containers = root.querySelectorAll('.item-price-amount, .d-flex, [class*="price"]');
+    for (const container of containers) {
+      if (container.hasAttribute(PROCESSED_ATTR)) continue;
+      if (container.querySelector('.' + BADGE_CLASS)) continue;
+      // Collect text from all child elements
+      const text = container.textContent.replace(/\s+/g, '').trim();
+      // Try to match a price pattern
+      const m = text.match(/^(NZ\$|US\$|A\$|CA\$|\$|€|£|¥)([\d,]+\.?\d*)$/);
+      if (!m) continue;
+      const symbol = m[1];
+      const amount = parseAmount(m[2]);
+      if (isNaN(amount) || amount <= 0 || amount > 999999999) continue;
+      // Determine currency from symbol
+      let currency = 'NZD';
+      if (symbol === 'US$') currency = 'USD';
+      else if (symbol === 'A$') currency = 'AUD';
+      else if (symbol === 'CA$') currency = 'CAD';
+      else if (symbol === '€') currency = 'EUR';
+      else if (symbol === '£') currency = 'GBP';
+      else if (symbol === '¥') currency = 'JPY';
+      // Convert
+      const rates = allRates[currency];
+      const converted = convert(amount, currency, settings.targetCurrency, rates);
+      if (converted === null) continue;
+      // Add badge
+      container.setAttribute(PROCESSED_ATTR, '1');
+      const badge = document.createElement('span');
+      badge.className = BADGE_CLASS;
+      badge.textContent = formatConverted(converted, settings.targetCurrency);
+      container.appendChild(badge);
+    }
+  }
+
   async function run() {
     // Get settings
     const s = await new Promise(resolve => {
@@ -135,11 +171,12 @@
     const currencies = ['USD', 'EUR', 'GBP', 'NZD', 'AUD', 'CAD', 'JPY'];
     await Promise.all(currencies.map(c => loadRatesForCurrency(c)));
 
-    // Process page
+    // Process page - text nodes first, then split-span prices
     const textNodes = getTextNodes(document.body);
     for (const node of textNodes) {
       processTextNode(node);
     }
+    processSplitPrices(document.body);
   }
 
   // Run on load
@@ -152,6 +189,7 @@
         if (node.nodeType === Node.ELEMENT_NODE && !node.classList?.contains(BADGE_CLASS)) {
           const textNodes = getTextNodes(node);
           for (const tn of textNodes) processTextNode(tn);
+          processSplitPrices(node);
         }
       }
     }
