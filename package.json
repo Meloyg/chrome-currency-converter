@@ -1,0 +1,16 @@
+{
+  "name": "chrome-currency-converter",
+  "version": "1.0.0",
+  "description": "Browser extension that auto-detects prices and shows converted amounts inline",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "package": "zip -r currency-converter.zip manifest.json background.js content.js popup.html popup.js styles.css"
+  },
+  "keywords": ["chrome-extension", "edge-extension", "currency", "converter", "exchange-rate"],
+  "author": "MeloyG",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MeloyG/chrome-currency-converter.git"
+  }
+}

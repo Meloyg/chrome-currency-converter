@@ -1,45 +1,88 @@
-# Currency Converter - Chrome Extension
+# 💱 Currency Converter — Browser Extension
 
-自动检测网页上的价格，并在旁边显示转换后的目标货币金额。
+Automatically detects prices on any web page and shows converted amounts in your preferred currency, inline as a small badge.
 
-## 功能
+![Chrome](https://img.shields.io/badge/Chrome-✓-green?logo=googlechrome) ![Edge](https://img.shields.io/badge/Edge-✓-green?logo=microsoftedge) ![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)
 
-- 🔍 自动识别页面上的价格（支持 $, €, £, ¥, NZ$, A$, US$, CA$ 等）
-- 💱 实时汇率转换（使用 [Frankfurter API](https://www.frankfurter.app/)）
-- 🏷️ 在原始价格旁边注入小标签显示转换结果（如 `≈ ¥123.45`）
-- ⚙️ 点击插件图标可选择目标货币（默认：CNY 人民币）
+## Features
 
-## 支持的货币
+- 🔍 **Auto-detection** — Finds prices in USD, NZD, EUR, GBP, AUD, CAD, JPY on any page
+- 🏷️ **Inline badges** — Shows converted amount right next to the original price
+- 🧩 **Split-price support** — Handles prices split across multiple HTML elements (e.g. PB Tech)
+- 💾 **Smart caching** — Rates cached for 30 minutes to reduce API calls
+- ⚡ **Dynamic pages** — Watches for new content via MutationObserver
+- 🌏 **Bare `$` = NZD** — Defaults to NZD for unqualified dollar signs (configurable)
 
-| 符号 | 货币 |
-|------|------|
-| $ / US$ | 美元 USD |
-| NZ$ | 新西兰元 NZD |
-| A$ | 澳元 AUD |
-| CA$ | 加元 CAD |
-| € | 欧元 EUR |
-| £ | 英镑 GBP |
-| ¥ | 日元 JPY |
+## Supported Currencies
 
-## 安装
+| Symbol | Currency |
+|--------|----------|
+| `$` | NZD (default) |
+| `US$` | USD |
+| `A$` | AUD |
+| `CA$` | CAD |
+| `€` | EUR |
+| `£` | GBP |
+| `¥` | JPY |
 
-1. 下载或 clone 本仓库
-2. 打开 Chrome，访问 `chrome://extensions/`
-3. 右上角开启 **开发者模式**
-4. 点击 **加载已解压的扩展程序**
-5. 选择本项目文件夹
+## Installation
 
-## 使用
+### Chrome / Edge (from source)
 
-- 安装后自动生效，浏览网页时会自动检测价格并显示转换
-- 点击浏览器工具栏的插件图标，可以切换目标货币
+1. Clone or download this repo
+2. Open `chrome://extensions` (Chrome) or `edge://extensions` (Edge)
+3. Enable **Developer mode**
+4. Click **Load unpacked** → select the repo folder
+5. Done! Visit any page with prices to see conversions.
 
-## 技术栈
+### Chrome Web Store / Edge Add-ons
 
-- Chrome Extension Manifest V3
-- Frankfurter API（免费、无需 API key）
-- 纯 JavaScript，无外部依赖
+Coming soon.
+
+## Configuration
+
+Click the extension icon to open the popup:
+
+- **Convert to** — Select your target currency (default: CNY)
+- **Exchange rate** — Shows current rate (e.g. "1 NZD = 4.82 CNY")
+- **Save & Reload** — Applies the change and refreshes the page
+
+## Exchange Rate Source
+
+Rates come from the [Frankfurter API](https://api.frankfurter.app), which sources data from the **European Central Bank (ECB)** — updated every working day, free, no API key required.
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Package for distribution
+npm run package
+```
+
+## Project Structure
+
+```
+├── manifest.json      # Extension manifest (V3)
+├── background.js      # Service worker — rate fetching & caching
+├── content.js         # Content script — price detection & badge injection
+├── popup.html/js      # Extension popup UI
+├── styles.css         # Badge styling
+├── tests/             # Unit tests
+└── package.json       # Node project config
+```
+
+## Contributing
+
+1. Fork the repo
+2. Create a feature branch
+3. Run `npm test` to ensure tests pass
+4. Submit a PR
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE)
